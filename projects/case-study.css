@@ -8,11 +8,11 @@ body { background:var(--paper); color:var(--ink); font:15px/1.7 "IBM Plex Sans K
 .wordmark { font-size:17px; font-weight:600; letter-spacing:-.04em; }
 .site-header nav { margin-left:auto; margin-right:22px; font-size:13px; color:var(--muted); }
 .controls { display:flex; gap:8px; }.control-button { width:33px; height:30px; padding:0; border:1px solid var(--line); border-radius:5px; background:transparent; color:var(--ink); font:500 11px "DM Mono", monospace; cursor:pointer; }
-.case-study { max-width:760px; margin:0 auto; padding:76px 0 84px; }
+.case-study { max-width:880px; margin:0 auto; padding:76px 0 84px; }
 .case-hero { padding-bottom:44px; border-bottom:1px solid var(--line); }
 .case-kicker, dt { margin:0; color:var(--muted); font:500 11px "DM Mono", monospace; letter-spacing:.04em; }
 .case-hero h1 { margin:11px 0 12px; font-size:clamp(36px, 5vw, 52px); line-height:1.12; letter-spacing:-.065em; }
-.case-lead { max-width:650px; margin:0; font-size:18px; line-height:1.6; letter-spacing:-.025em; }
+.case-lead { max-width:760px; margin:0; font-size:18px; line-height:1.6; letter-spacing:-.025em; }
 .case-meta { display:grid; grid-template-columns:1fr 1fr; gap:17px 34px; margin:36px 0 22px; }.case-meta div { display:grid; grid-template-columns:112px 1fr; gap:12px; }.case-meta dd { margin:0; font-size:14px; }
 .case-disclosure { margin:0; color:var(--muted); font-size:12px; }
 .case-section { padding:42px 0; border-bottom:1px solid var(--line); }.case-section h2 { margin:0 0 17px; font-size:23px; letter-spacing:-.045em; }.case-section p { max-width:710px; margin:0; letter-spacing:-.015em; }
