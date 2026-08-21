@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Healthcare Information Exchange repository migration technical case study" />
+    <title>HIS Referral Workflow for an HIE Repository Migration — Younghwan Kim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="case-study.css" />
+    <script src="hie-repository-case-study.js" defer></script>
+  </head>
+  <body>
+    <div class="header-shell">
+      <header class="site-header">
+        <a class="wordmark" href="../index.html">Younghwan Kim</a>
+        <nav aria-label="Case study navigation"><a href="../index.html#projects" data-i18n="nav.back">← 프로젝트</a></nav>
+        <div class="controls">
+          <button class="control-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
+          <button class="control-button" id="theme-toggle" type="button" aria-label="Switch color theme">◐</button>
+        </div>
+      </header>
+    </div>
+
+    <main>
+      <article class="case-study">
+        <header class="case-hero">
+          <p class="case-kicker" data-i18n="hero.kicker">TECHNICAL CASE STUDY</p>
+          <h1 data-i18n="hero.title">진료정보교류 거점 문서저장소 이관 대응</h1>
+          <p class="case-lead" data-i18n="hero.lead">통합 거점의 의뢰·회송 수신을 기존 HIS 업무 흐름에 재연결한 이관 대응 프로젝트</p>
+          <dl class="case-meta">
+            <div><dt data-i18n="meta.organization.label">ORGANIZATION</dt><dd data-i18n="meta.organization.value">이지케어텍 · 분당서울대학교병원</dd></div>
+            <div><dt data-i18n="meta.period.label">PERIOD</dt><dd data-i18n="meta.period.value">2024</dd></div>
+            <div><dt data-i18n="meta.role.label">ROLE</dt><dd data-i18n="meta.role.value">.NET developer</dd></div>
+            <div><dt data-i18n="meta.stack.label">STACK</dt><dd>C# · .NET · WPF · REST API · Oracle · JSON</dd></div>
+          </dl>
+          <p class="case-disclosure" data-i18n="hero.disclosure">보안과 기밀 유지를 위해 기관·시스템 식별 정보, 연동 설정, 데이터 구조, 실제 진료 문서·첨부파일 및 환자 정보는 공개하지 않습니다.</p>
+        </header>
+
+        <section class="case-section">
+          <h2 data-i18n="context.heading">Context &amp; Constraints</h2>
+          <p data-i18n="context.copy">진료정보교류 거점 문서저장소의 통합 이관에 맞춰, 외부 알림을 수신한 뒤 기존 HIS의 의뢰·회송 업무 흐름 안에서 처리할 수 있도록 연동을 정비했습니다. 외래와 응급 업무 화면에서 수신 문서를 계속 확인할 수 있어야 했고, 외부 환자 식별 정보와 내부 등록 정보의 연결, 문서 메타데이터와 첨부파일 처리, 기존 화면 흐름의 유지가 함께 필요했습니다.</p>
+        </section>
+
+        <section class="case-section">
+          <h2 data-i18n="flow.heading">System Flow</h2>
+          <div class="flow" aria-label="System data flow">
+            <div data-i18n="flow.notification">통합 거점 알림 API</div><span>→</span>
+            <div data-i18n="flow.mapping">알림 응답 매핑</div><span>→</span>
+            <div data-i18n="flow.patient">환자 식별 연계</div><span>→</span>
+            <div data-i18n="flow.document">문서 메타데이터·첨부파일 처리</div><span>→</span>
+            <div data-i18n="flow.layers">업무·데이터 계층</div><span>→</span>
+            <div data-i18n="flow.ui">외래·응급 의뢰/회송 화면</div>
+          </div>
+          <p class="section-note" data-i18n="flow.note">알림을 수신하는 데서 끝내지 않고, 내부 업무에 필요한 형태로 연결·저장한 뒤 기존 목록을 갱신하도록 구성했습니다.</p>
+        </section>
+
+        <section class="case-section">
+          <h2 data-i18n="decisions.heading">Engineering Decisions</h2>
+          <div class="decision-list">
+            <article><h3 data-i18n="decision.endpoint.title">환경별 연동 경계</h3><p data-i18n="decision.endpoint.copy">연동 대상의 환경별 설정을 코드의 업무 로직과 분리해 관리했습니다. 통합 거점 전환에 따른 연결 지점의 변경이 화면과 저장 로직에 넓게 번지지 않도록 하기 위해서였습니다.</p></article>
+            <article><h3 data-i18n="decision.identity.title">환자 식별 연계 단계 분리</h3><p data-i18n="decision.identity.copy">외부에서 받은 환자 식별 정보를 내부 환자 등록 정보와 연결하는 단계를 수신 흐름 안에 분리했습니다. 수신 문서가 기존 진료 업무에서 올바른 대상과 함께 조회될 수 있도록 하기 위한 판단이었습니다.</p></article>
+            <article><h3 data-i18n="decision.document.title">문서와 첨부파일의 처리 흐름</h3><p data-i18n="decision.document.copy">의뢰·회송 문서의 메타데이터와 첨부파일 정보를 내부 업무·데이터 계층으로 전달하는 흐름을 정리했습니다. 외부 알림의 정보를 기존 업무 화면에서 활용할 수 있는 형태로 연결하기 위해서였습니다.</p></article>
+            <article><h3 data-i18n="decision.workflow.title">운영 흐름을 고려한 수신</h3><p data-i18n="decision.workflow.copy">외래·응급 업무에서 수동 및 주기적 조회 흐름을 제공하고, 조회 기간을 제한했습니다. 저장 뒤에는 기존 의뢰·회송 목록을 다시 조회해 현업이 익숙한 화면 흐름에서 수신 결과를 확인하도록 했습니다.</p></article>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2 data-i18n="contribution.heading">My Contribution</h2>
+          <ul>
+            <li data-i18n="contribution.one">통합 거점 알림 API client와 환경별 연동 설정 처리 구현</li>
+            <li data-i18n="contribution.two">외래·응급 수신 조회, 주기 조회, 조회 기간 검증 흐름 구현</li>
+            <li data-i18n="contribution.three">외부 환자 식별 정보와 내부 환자 등록 정보의 연계, 의뢰·회송 메타데이터 저장 흐름 구현</li>
+            <li data-i18n="contribution.four">문서 첨부파일 처리와 기존 의뢰·회송 목록 갱신을 업무·데이터 계층과 연계</li>
+          </ul>
+        </section>
+
+        <section class="case-section case-outcome">
+          <h2 data-i18n="outcome.heading">Validation &amp; Outcome</h2>
+          <p data-i18n="outcome.copy">알림 수신, 환자 식별 연계, 문서 메타데이터·첨부파일 처리, 내부 저장과 기존 목록 갱신까지의 흐름을 검증했습니다. 통합 거점 문서저장소 이관 이후에도 현업이 기존 외래·응급 의뢰·회송 화면 안에서 수신 문서를 처리할 수 있도록 연결했습니다.</p>
+        </section>
+      </article>
+    </main>
+    <footer><p>© 2026 Younghwan Kim</p><div><a href="../index.html#projects" data-i18n="nav.back">← 프로젝트</a></div></footer>
+  </body>
+</html>

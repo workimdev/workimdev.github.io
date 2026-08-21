@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Kakao Pasta Health Data Integration technical case study" />
-    <title>Kakao Pasta Health Data Integration — Younghwan Kim</title>
+    <meta name="description" content="Kakao Pasta blood glucose data integration technical case study" />
+    <title>Kakao Pasta Blood Glucose Data Integration — Younghwan Kim</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -29,57 +29,74 @@
         <header class="case-hero">
           <p class="case-kicker" data-i18n="hero.kicker">TECHNICAL CASE STUDY</p>
           <h1 data-i18n="hero.title">카카오 파스타 혈당 데이터 연동</h1>
-          <p class="case-lead" data-i18n="hero.lead">외부 헬스케어 데이터를 병원 HIS의 진료기록 업무 흐름에 연결한 연동 프로젝트</p>
+          <p class="case-lead" data-i18n="hero.lead">외부 헬스케어 앱의 혈당 데이터를 병원 정보시스템(HIS)과 연결해, 의료진이 기존 진료기록에서 활용할 수 있도록 한 연동 프로젝트</p>
           <dl class="case-meta">
             <div><dt data-i18n="meta.organization.label">ORGANIZATION</dt><dd data-i18n="meta.organization.value">이지케어텍 · 분당서울대학교병원</dd></div>
-            <div><dt data-i18n="meta.period.label">PERIOD</dt><dd data-i18n="meta.period.value">2024.06 — 2024.07</dd></div>
+            <div><dt data-i18n="meta.period.label">PERIOD</dt><dd data-i18n="meta.period.value">2024</dd></div>
             <div><dt data-i18n="meta.role.label">ROLE</dt><dd data-i18n="meta.role.value">.NET developer</dd></div>
-            <div><dt data-i18n="meta.stack.label">STACK</dt><dd>C# · .NET · WPF · Oracle · PL/SQL · REST API · JSON</dd></div>
+            <div><dt data-i18n="meta.stack.label">STACK</dt><dd>C# · .NET · WPF · Oracle · PL/SQL · REST API · JSON · Apache Tomcat</dd></div>
           </dl>
-          <p class="case-disclosure" data-i18n="hero.disclosure">보안과 기밀 유지를 위해 내부 시스템 식별 정보, API 세부 사양, 환자 데이터는 공개하지 않습니다.</p>
+          <p class="case-disclosure" data-i18n="hero.disclosure">보안과 기밀 유지를 위해 내부 시스템 식별 정보, API 세부 사양, 환자 데이터는 공개하지 않습니다. 외부 서비스의 환자 본인인증, 계정 매핑, 동의, 원천 데이터 수집은 본 HIS 연동의 담당 범위에 포함하지 않습니다.</p>
         </header>
 
         <section class="case-section">
-          <h2 data-i18n="context.heading">Context & Constraints</h2>
-          <p data-i18n="context.copy">카카오헬스케어 파스타의 혈당 데이터를 병원 HIS로 안전하게 수신하고, 의료진이 진료기록에서 바로 활용할 수 있도록 연동해야 했습니다. 외부망과 내부망이 분리된 환경에서 중계 서버를 경유한 통신·인증 흐름을 구성해야 했고, 수신 데이터는 환자 정보와 연결해 내부 DB와 진료기록 화면에서 활용할 수 있는 형태로 가공해야 했습니다.</p>
+          <h2 data-i18n="context.heading">배경과 제약</h2>
+          <p data-i18n="context.copy">외부 헬스케어 앱의 혈당 데이터를 병원 진료기록 안에서 활용하려면, 중계 서버 기반 통신·인증과 REST API·JSON 처리, 기존 EMR 환자·수진 컨텍스트를 활용한 환자 연결이 필요했습니다. 이후 AGP 리포트와 사전 적재된 혈당 가공 지표를 각각 기존 기록 작성 흐름과 진료서식에서 소비하도록 연결했습니다.</p>
         </section>
 
         <section class="case-section">
-          <h2 data-i18n="flow.heading">System Flow</h2>
-          <div class="flow" aria-label="System data flow">
-            <div data-i18n="flow.external">External healthcare API</div><span>→</span>
-            <div data-i18n="flow.relay">Relay-server authentication & communication</div><span>→</span>
-            <div data-i18n="flow.patient">Patient validation & JSON processing</div><span>→</span>
-            <div data-i18n="flow.storage">Oracle / PL·SQL persistence</div><span>→</span>
-            <div data-i18n="flow.report">Report generation & storage</div><span>→</span>
-            <div data-i18n="flow.ui">Clinical-record UI</div>
+          <h2 data-i18n="flow.heading">시스템 흐름</h2>
+          <p class="section-note" data-i18n="flow.foundation.label">외부 데이터 연동 기반 흐름</p>
+          <div class="flow" aria-label="External healthcare data integration flow">
+            <div data-i18n="flow.foundation.external">외부 헬스케어 서비스</div><span>→</span>
+            <div data-i18n="flow.foundation.relay">중계 서버 기반 통신·인증</div><span>→</span>
+            <div data-i18n="flow.foundation.api">REST API·JSON 수신/변환</div><span>→</span>
+            <div data-i18n="flow.foundation.patient">EMR 환자·수진 컨텍스트를 활용한 환자 연결</div>
           </div>
-          <p class="section-note" data-i18n="flow.note">외부 응답을 그대로 화면에 전달하지 않고, HIS가 사용하는 데이터 흐름 안에서 변환·저장·조회되도록 구성했습니다.</p>
+          <p class="section-note" data-i18n="flow.reportPath.label">AGP 리포트 소비 경로</p>
+          <div class="flow" aria-label="AGP report consumption flow">
+            <div data-i18n="flow.report.record">외래 초진/경과기록</div><span>→</span>
+            <div data-i18n="flow.report.eligibility">사용자·진료과·서식 조건 확인</div><span>→</span>
+            <div data-i18n="flow.report.request">AGP 리포트 조회</div><span>→</span>
+            <div data-i18n="flow.report.image">리포트 이미지 조회·수신</div><span>→</span>
+            <div data-i18n="flow.report.insert">현재 진료기록 본문 삽입</div><span>→</span>
+            <div data-i18n="flow.report.saveSign">기존 저장·서명 절차</div>
+          </div>
+          <p class="section-note" data-i18n="flow.metricsPath.label">혈당 가공 지표 소비 경로</p>
+          <div class="flow" aria-label="Processed glucose metrics consumption flow">
+            <div data-i18n="flow.metrics.identifier">환자 연결된 혈당 가공 데이터</div><span>→</span>
+            <div data-i18n="flow.metrics.query">Oracle DB 조회·PL/SQL 업무 처리</div><span>→</span>
+            <div data-i18n="flow.metrics.data">혈당 지표·그래프 데이터</div><span>→</span>
+            <div data-i18n="flow.metrics.form">진료서식 활용</div>
+          </div>
+          <p class="section-note" data-i18n="flow.note">상단은 외부 데이터를 HIS에 연결하는 기반 흐름이고, 아래 두 경로는 연결된 데이터를 소비하는 흐름입니다. AGP 리포트는 이미지로 현재 기록 본문에 반영하고, 혈당 가공 지표는 Oracle 기반 조회를 거쳐 진료서식에서 활용합니다.</p>
         </section>
 
         <section class="case-section">
-          <h2 data-i18n="decisions.heading">Engineering Decisions</h2>
+          <h2 data-i18n="decisions.heading">구현 판단</h2>
           <div class="decision-list">
-            <article><h3 data-i18n="decision.boundary.title">Integration boundary</h3><p data-i18n="decision.boundary.copy">외부 API 응답과 진료기록 화면 사이에 데이터 변환과 저장 단계를 분리했습니다. 외부 서비스의 응답 형식이 바뀌더라도 사용자 화면과 업무 로직에 미치는 영향을 제한하기 위해서였습니다.</p></article>
-            <article><h3 data-i18n="decision.report.title">Report-oriented presentation</h3><p data-i18n="decision.report.copy">수신 데이터를 내부 DB에 저장하는 데서 끝내지 않고, 진료기록 화면에서 바로 활용할 수 있는 이미지 형태의 리포트를 생성·저장하도록 구성했습니다. 의료진이 원본 응답 구조를 해석하지 않고 필요한 정보를 확인할 수 있도록 하기 위해서였습니다.</p></article>
-            <article><h3 data-i18n="decision.workflow.title">Workflow-first UI</h3><p data-i18n="decision.workflow.copy">별도의 신규 화면보다 기존 진료기록 화면에서 혈당 데이터를 조회할 수 있도록 구성했습니다. 의료진이 익숙한 업무 흐름 안에서 정보를 확인하도록 하기 위한 판단이었습니다.</p></article>
-            <article><h3 data-i18n="decision.failure.title">Failure handling</h3><p data-i18n="decision.failure.copy">인증 실패, 환자 정보 불일치, 데이터 누락 등 주요 실패 상황을 구분하고, 확인과 조치가 가능한 사용자 메시지와 예외 처리 흐름을 구현했습니다.</p></article>
+            <article><h3 data-i18n="decision.integration.title">HIS 연동 경계</h3><p data-i18n="decision.integration.copy">외부 서비스와의 중계 서버 기반 통신·인증 흐름을 HIS 측 REST API·JSON 처리로 수용하고, 기존 EMR 환자·수진 컨텍스트를 활용해 환자를 연결했습니다.</p></article>
+            <article><h3 data-i18n="decision.availability.title">조건 기반 기능 노출</h3><p data-i18n="decision.availability.copy">공통 진료기록 헤더의 AGP 기능은 외래 여부, 기록 유형, 사용자, 진료과 조건을 확인한 뒤에만 노출되도록 구성했습니다.</p></article>
+            <article><h3 data-i18n="decision.core.title">공통 진료기록 인터페이스로의 확장</h3><p data-i18n="decision.core.copy">외부 혈당 데이터를 한 병원의 일회성 화면 기능으로 만들기보다, 기존 HIS의 공통 진료기록 인터페이스 안에 통합했습니다. AGP 조회·리포트 반영 기능은 공통 헤더에서 제공하고, 병원별 적용 대상은 사용자·진료과·기록 서식 조건으로 조정하도록 구성했습니다. 이를 통해 업무 정책은 조건 설정으로 조정하면서도 핵심 연동 흐름은 공통 구조로 유지해, 다른 병원 환경에도 포팅·확장할 수 있도록 고려했습니다.</p></article>
+            <article><h3 data-i18n="decision.paths.title">두 소비 경로 분리</h3><p data-i18n="decision.paths.copy">AGP 경로는 리포트 이미지를 조회해 현재 기록에 반영하고, 지표 경로는 Oracle·PL/SQL 기반 업무 처리를 거쳐 사전 적재 데이터를 진료서식에 매핑합니다.</p></article>
+            <article><h3 data-i18n="decision.workflow.title">기존 저장·서명 흐름과 오류 안내</h3><p data-i18n="decision.workflow.copy">AGP 리포트는 이미지 조회·본문 삽입까지만 담당하고, 이후에는 기존 기록 저장·서명 절차가 이어지도록 했습니다. 호출 실패 또는 리포트 미작성 상태는 확인 가능한 안내로 처리했습니다.</p></article>
           </div>
         </section>
 
         <section class="case-section">
-          <h2 data-i18n="contribution.heading">My Contribution</h2>
+          <h2 data-i18n="contribution.heading">담당 범위</h2>
           <ul>
-            <li data-i18n="contribution.one">REST API 기반 외부 앱 혈당 데이터(JSON) 수신 로직 구현</li>
-            <li data-i18n="contribution.two">중계 서버를 경유하는 외부·내부망 통신 및 인증 처리 시나리오 설계</li>
-            <li data-i18n="contribution.three">환자 등록 여부 확인, Oracle 저장 및 PL/SQL 기반 업무 처리 로직 개발</li>
-            <li data-i18n="contribution.four">이미지 리포트 생성·서버 저장, 진료기록 UI 조회 버튼·예외 처리 구현</li>
+            <li data-i18n="contribution.one">중계 서버 기반 외부 연동 흐름에 맞춘 HIS 측 REST API·JSON 수신·변환 구현</li>
+            <li data-i18n="contribution.two">기존 EMR 환자·수진 컨텍스트를 이용한 환자 연결 및 공통 헤더의 조건 기반 AGP 기능 노출 구성</li>
+            <li data-i18n="contribution.three">AGP 리포트 이미지 조회·현재 EMR 진료기록 본문 반영과 오류·미작성 안내 구현</li>
+            <li data-i18n="contribution.four">Oracle DB 조회와 PL/SQL 기반 업무 처리를 통한 혈당 가공 지표·그래프 데이터의 진료서식 매핑</li>
+            <li data-i18n="contribution.five">리포트 반영 후 기존 기록 저장·서명 절차가 유지되도록 업무 흐름 연결</li>
           </ul>
         </section>
 
         <section class="case-section case-outcome">
-          <h2 data-i18n="outcome.heading">Validation & Outcome</h2>
-          <p data-i18n="outcome.copy">중계 서버 통신부터 데이터 저장, 이미지 리포트 생성, 진료기록 화면 조회까지의 흐름을 운영 환경에서 검증했습니다. 의료진의 수작업 입력을 줄이고 기존 진료기록 업무 안에서 혈당 이력을 확인할 수 있도록 지원했으며, 향후 외부 헬스케어 데이터 연동을 확장할 수 있는 기반을 마련했습니다.</p>
+          <h2 data-i18n="outcome.heading">검증과 결과</h2>
+          <p data-i18n="outcome.copy">외부 헬스케어 앱의 혈당 데이터를 환자별 진료기록 업무 흐름에서 활용할 수 있도록 했습니다. AGP 리포트 이미지는 현재 기록 본문에서 확인·반영하고, 혈당 가공 지표는 Oracle·PL/SQL 기반 조회를 거쳐 진료서식에서 활용하도록 연결했습니다.</p>
         </section>
       </article>
     </main>
