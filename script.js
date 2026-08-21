@@ -1,6 +1,7 @@
 const translations = {
   ko: {
     "nav.about":"소개", "nav.education":"학력", "nav.experience":"경력", "nav.projects":"프로젝트", "nav.skills":"기술",
+    "cv.link":"CV ↗", "cv.url":"https://drive.google.com/file/d/14H9H5G6KJ4sI8g3kpr24WYvoGW2EyF3m/view?usp=drive_link",
     "company.enliple":"인라이플", "company.ezcaretech":"이지케어텍",
     "section.education":"학력", "heading.education":"학력", "education.school":"삼육보건대학교", "education.degree":"의료정보공학과", "education.date":"2017.02 — 2022.02",
     "hero.summary":"저는 Windows 데스크톱 애플리케이션과 의료정보시스템을 개발하는 .NET 개발자입니다.",
@@ -15,7 +16,7 @@ const translations = {
     "experience.ezcare.role":".NET developer · 분당서울대학교병원 · 성남, 대한민국",
     "experience.ezcare.date":"2022.08 — 2025.05",
     "experience.snu":"치과병원 의료정보시스템의 운영 지원과 사용자 요청 기능 개발을 담당했습니다.",
-    "experience.snu.company":"서울대학교치과병원", "experience.snu.role":".NET developer · 의료정보팀 · 서울, 대한민국", "experience.snu.date":"2020.12 — 2021.06",
+    "experience.snu.company":"서울대학교치과병원", "experience.snu.role":"인턴 · 의료정보팀 · 서울, 대한민국", "experience.snu.date":"2020.12 — 2021.06",
     "project.ezmemo.meta":"2025 — 2026 · 인라이플", "project.ezcare.meta":"2024 · 이지케어텍", "project.ezmemo.title":"ezMemo 데스크톱 애플리케이션", "project.pasta.title":"카카오 파스타 혈당 데이터 연동", "project.exchange.title":"진료정보교류 시스템 연동 구조 전환", "project.ezmemo.lead":"Local-First 동기화 구조를 갖춘 Windows 메모 애플리케이션 고도화", "project.ezmemo.copy":"로컬 우선 저장, 비동기 서버 동기화, 안전한 데이터 마이그레이션, 설치·자동 업데이트 흐름을 중심으로 데스크톱 애플리케이션을 고도화했습니다.",
     "project.productLink":"제품 페이지 ↗",
     "project.pasta.lead":"카카오헬스케어 혈당 데이터를 병원 HIS에 연결", "project.pasta.copy":"외부 헬스케어 API 인증과 JSON 데이터 처리, Oracle 저장, 진료기록 화면 연동까지 의료진이 사용할 수 있는 전체 흐름을 구현했습니다.",
@@ -24,6 +25,7 @@ const translations = {
   },
   en: {
     "nav.about":"About", "nav.education":"Education", "nav.experience":"Work Experience", "nav.projects":"Projects", "nav.skills":"Skills",
+    "cv.link":"CV ↗", "cv.url":"https://drive.google.com/file/d/1K8zyKO_pUwWhq0M52xrvm42RUpgrI4y0/view?usp=drive_link",
     "company.enliple":"ENLIPLE", "company.ezcaretech":"ezCaretech",
     "section.education":"Education", "heading.education":"Education", "education.school":"Sahmyook Health University", "education.degree":"Medical Information Engineering", "education.date":"Feb. 2017 — Feb. 2022",
     "hero.summary":"I am a .NET developer building Windows desktop applications and healthcare information systems.",
@@ -38,7 +40,7 @@ const translations = {
     "experience.ezcare.role":".NET developer · Bundang Seoul National University Hospital · Seongnam, Korea",
     "experience.ezcare.date":"Aug. 2022 — May 2025",
     "experience.snu":"Supported the operation and feature development of dental hospital information systems.",
-    "experience.snu.company":"Seoul National University Dental Hospital", "experience.snu.role":".NET developer · Medical Information Team · Seoul, Korea", "experience.snu.date":"Dec. 2020 — Jun. 2021",
+    "experience.snu.company":"Seoul National University Dental Hospital", "experience.snu.role":"Intern · Medical Information Team · Seoul, Korea", "experience.snu.date":"Dec. 2020 — Jun. 2021",
     "project.ezmemo.meta":"2025 — 2026 · ENLIPLE", "project.ezcare.meta":"2024 · ezCaretech", "project.ezmemo.title":"ezMemo Desktop App", "project.pasta.title":"Kakao Pasta Health Data Integration", "project.exchange.title":"Healthcare Information Exchange Migration", "project.ezmemo.lead":"Advancing a Windows memo application through a local-first synchronization architecture", "project.ezmemo.copy":"Improved a desktop application around local-first storage, asynchronous server synchronization, safe data migration, and a dependable install/update lifecycle.",
     "project.productLink":"Product page ↗",
     "project.pasta.lead":"Bringing Kakao Healthcare glucose data into a hospital HIS", "project.pasta.copy":"Built the end-to-end workflow used by clinicians: external healthcare API authentication, JSON processing, Oracle persistence, and clinical-record UI integration.",
@@ -51,6 +53,9 @@ const applyLanguage = (language) => {
   document.documentElement.lang = language;
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     element.innerHTML = translations[language][element.dataset.i18n];
+  });
+  document.querySelectorAll("[data-i18n-href]").forEach((element) => {
+    element.href = translations[language][element.dataset.i18nHref];
   });
   document.getElementById("language-toggle").textContent = language === "ko" ? "EN" : "KO";
   localStorage.setItem("portfolio-language", language);
