@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Kakao Pasta Health Data Integration technical case study" />
+    <title>Kakao Pasta Health Data Integration — Younghwan Kim</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="case-study.css" />
+    <script src="case-study.js" defer></script>
+  </head>
+  <body>
+    <div class="header-shell">
+      <header class="site-header">
+        <a class="wordmark" href="../index.html">Younghwan Kim</a>
+        <nav aria-label="Case study navigation"><a href="../index.html#projects" data-i18n="nav.back">← 프로젝트</a></nav>
+        <div class="controls">
+          <button class="control-button" id="language-toggle" type="button" aria-label="Switch language">EN</button>
+          <button class="control-button" id="theme-toggle" type="button" aria-label="Switch color theme">◐</button>
+        </div>
+      </header>
+    </div>
+
+    <main>
+      <article class="case-study">
+        <header class="case-hero">
+          <p class="case-kicker" data-i18n="hero.kicker">TECHNICAL CASE STUDY</p>
+          <h1 data-i18n="hero.title">카카오 파스타 혈당 데이터 연동</h1>
+          <p class="case-lead" data-i18n="hero.lead">외부 헬스케어 데이터를 병원 HIS의 진료기록 업무 흐름에 연결한 연동 프로젝트</p>
+          <dl class="case-meta">
+            <div><dt data-i18n="meta.organization.label">ORGANIZATION</dt><dd data-i18n="meta.organization.value">이지케어텍 · 분당서울대학교병원</dd></div>
+            <div><dt data-i18n="meta.period.label">PERIOD</dt><dd data-i18n="meta.period.value">2024.06 — 2024.07</dd></div>
+            <div><dt data-i18n="meta.role.label">ROLE</dt><dd data-i18n="meta.role.value">.NET developer</dd></div>
+            <div><dt data-i18n="meta.stack.label">STACK</dt><dd>C# · .NET · WPF · Oracle · PL/SQL · REST API · JSON</dd></div>
+          </dl>
+          <p class="case-disclosure" data-i18n="hero.disclosure">보안과 기밀 유지를 위해 내부 시스템 식별 정보, API 세부 사양, 환자 데이터는 공개하지 않습니다.</p>
+        </header>
+
+        <section class="case-section">
+          <h2 data-i18n="context.heading">Context & Constraints</h2>
+          <p data-i18n="context.copy">카카오헬스케어 파스타의 혈당 데이터를 병원 HIS로 안전하게 수신하고, 의료진이 진료기록에서 바로 활용할 수 있도록 연동해야 했습니다. 외부망과 내부망이 분리된 환경에서 중계 서버를 경유한 통신·인증 흐름을 구성해야 했고, 수신 데이터는 환자 정보와 연결해 내부 DB와 진료기록 화면에서 활용할 수 있는 형태로 가공해야 했습니다.</p>
+        </section>
+
+        <section class="case-section">
+          <h2 data-i18n="flow.heading">System Flow</h2>
+          <div class="flow" aria-label="System data flow">
+            <div data-i18n="flow.external">External healthcare API</div><span>→</span>
+            <div data-i18n="flow.relay">Relay-server authentication & communication</div><span>→</span>
+            <div data-i18n="flow.patient">Patient validation & JSON processing</div><span>→</span>
+            <div data-i18n="flow.storage">Oracle / PL·SQL persistence</div><span>→</span>
+            <div data-i18n="flow.report">Report generation & storage</div><span>→</span>
+            <div data-i18n="flow.ui">Clinical-record UI</div>
+          </div>
+          <p class="section-note" data-i18n="flow.note">외부 응답을 그대로 화면에 전달하지 않고, HIS가 사용하는 데이터 흐름 안에서 변환·저장·조회되도록 구성했습니다.</p>
+        </section>
+
+        <section class="case-section">
+          <h2 data-i18n="decisions.heading">Engineering Decisions</h2>
+          <div class="decision-list">
+            <article><h3 data-i18n="decision.boundary.title">Integration boundary</h3><p data-i18n="decision.boundary.copy">외부 API 응답과 진료기록 화면 사이에 데이터 변환과 저장 단계를 분리했습니다. 외부 서비스의 응답 형식이 바뀌더라도 사용자 화면과 업무 로직에 미치는 영향을 제한하기 위해서였습니다.</p></article>
+            <article><h3 data-i18n="decision.report.title">Report-oriented presentation</h3><p data-i18n="decision.report.copy">수신 데이터를 내부 DB에 저장하는 데서 끝내지 않고, 진료기록 화면에서 바로 활용할 수 있는 이미지 형태의 리포트를 생성·저장하도록 구성했습니다. 의료진이 원본 응답 구조를 해석하지 않고 필요한 정보를 확인할 수 있도록 하기 위해서였습니다.</p></article>
+            <article><h3 data-i18n="decision.workflow.title">Workflow-first UI</h3><p data-i18n="decision.workflow.copy">별도의 신규 화면보다 기존 진료기록 화면에서 혈당 데이터를 조회할 수 있도록 구성했습니다. 의료진이 익숙한 업무 흐름 안에서 정보를 확인하도록 하기 위한 판단이었습니다.</p></article>
+            <article><h3 data-i18n="decision.failure.title">Failure handling</h3><p data-i18n="decision.failure.copy">인증 실패, 환자 정보 불일치, 데이터 누락 등 주요 실패 상황을 구분하고, 확인과 조치가 가능한 사용자 메시지와 예외 처리 흐름을 구현했습니다.</p></article>
+          </div>
+        </section>
+
+        <section class="case-section">
+          <h2 data-i18n="contribution.heading">My Contribution</h2>
+          <ul>
+            <li data-i18n="contribution.one">REST API 기반 외부 앱 혈당 데이터(JSON) 수신 로직 구현</li>
+            <li data-i18n="contribution.two">중계 서버를 경유하는 외부·내부망 통신 및 인증 처리 시나리오 설계</li>
+            <li data-i18n="contribution.three">환자 등록 여부 확인, Oracle 저장 및 PL/SQL 기반 업무 처리 로직 개발</li>
+            <li data-i18n="contribution.four">이미지 리포트 생성·서버 저장, 진료기록 UI 조회 버튼·예외 처리 구현</li>
+          </ul>
+        </section>
+
+        <section class="case-section case-outcome">
+          <h2 data-i18n="outcome.heading">Validation & Outcome</h2>
+          <p data-i18n="outcome.copy">중계 서버 통신부터 데이터 저장, 이미지 리포트 생성, 진료기록 화면 조회까지의 흐름을 운영 환경에서 검증했습니다. 의료진의 수작업 입력을 줄이고 기존 진료기록 업무 안에서 혈당 이력을 확인할 수 있도록 지원했으며, 향후 외부 헬스케어 데이터 연동을 확장할 수 있는 기반을 마련했습니다.</p>
+        </section>
+      </article>
+    </main>
+    <footer><p>© 2026 Younghwan Kim</p><div><a href="../index.html#projects" data-i18n="nav.back">← 프로젝트</a></div></footer>
+  </body>
+</html>

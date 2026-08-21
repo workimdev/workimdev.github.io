@@ -18,7 +18,8 @@
 .project-thumb--memo img, .project-thumb--pasta img { width: 100%; height: 100%; object-fit: cover; }
 .project-thumb--exchange { background: #eff4fb; }
 .project-thumb--exchange img { width: 86px; height: 86px; }
-.project .project-link { display: inline-block; margin-top: 17px; }
+.project-actions { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 17px; }
+.project .project-actions .project-link { margin-top: 0; }
 .intro-summary { max-width: 710px; margin-top: 20px; }
 .intro-summary p { margin: 0 0 13px; font-size: 15px; line-height: 1.72; letter-spacing: -.015em; }
 .eyebrow { font-family: "IBM Plex Sans KR", Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none; }
