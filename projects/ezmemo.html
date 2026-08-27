@@ -29,7 +29,7 @@
         <header class="case-hero">
           <p class="case-kicker" data-i18n="hero.kicker">TECHNICAL CASE STUDY</p>
           <h1 data-i18n="hero.title">ezMemo PC 정식 출시</h1>
-          <p class="case-lead" data-i18n="hero.lead">기존 사용자 데이터를 유지한 채 Local-First 구조로 전환하고 정식 출시한 Windows 메모 애플리케이션</p>
+          <p class="case-lead" data-i18n="hero.lead">모바일 버전과 데이터를 공유·동기화하도록 Local-First 구조로 전환하고 정식 출시한 Windows 메모 애플리케이션</p>
           <dl class="case-meta">
             <div><dt data-i18n="meta.organization.label">ORGANIZATION</dt><dd data-i18n="meta.organization.value">인라이플 · 모비소프트 개발팀</dd></div>
             <div><dt data-i18n="meta.period.label">PERIOD</dt><dd data-i18n="meta.period.value">2025.09 — 현재</dd></div>
@@ -41,26 +41,26 @@
 
         <section class="case-section">
           <h2 data-i18n="context.heading">Context &amp; Constraints</h2>
-          <p data-i18n="context.copy">ezMemo는 기존 사용자의 데이터와 사용 경험을 유지하면서 데스크톱 구조를 발전시켜야 했습니다. 네트워크 상태가 바뀌어도 메모 작성과 조회가 안정적으로 이어져야 했고, 업데이트를 통해 새로운 저장 구조를 도입하더라도 사용자가 초기화나 수동 이전을 하지 않도록 해야 했습니다.</p>
+          <p data-i18n="context.copy">모바일 버전 출시를 위해 PC와 모바일이 동일한 데이터 모델과 동기화 규칙을 사용하도록 기존 PC 중심 저장 구조를 재설계해야 했습니다. 동시에 기존 사용자 데이터와 사용 경험을 유지해야 했고, 네트워크 상태가 바뀌어도 메모 작성과 조회가 안정적으로 이어져야 했습니다. 업데이트를 통해 새로운 구조를 도입하더라도 사용자가 초기화나 수동 이전을 하지 않도록 해야 했습니다.</p>
         </section>
 
         <section class="case-section">
           <h2 data-i18n="flow.heading">System Flow</h2>
           <div class="flow" aria-label="System data flow">
-            <div data-i18n="flow.input">사용자 입력</div><span>→</span>
-            <div data-i18n="flow.local">로컬 SQLite 저장</div><span>→</span>
-            <div data-i18n="flow.state">변경 상태 관리</div><span>→</span>
-            <div data-i18n="flow.sync">비동기 서버 동기화</div><span>→</span>
-            <div data-i18n="flow.recovery">결과 반영·재시도</div><span>→</span>
-            <div data-i18n="flow.ui">데스크톱 UI</div>
+            <div data-i18n="flow.input">PC 데스크톱 UI</div><span>↔</span>
+            <div data-i18n="flow.local">로컬 SQLite 저장</div><span>↔</span>
+            <div data-i18n="flow.state">변경 상태 관리</div><span>↔</span>
+            <div data-i18n="flow.sync">서버 동기화·재시도</div><span>↔</span>
+            <div data-i18n="flow.recovery">공통 데이터 모델</div><span>↔</span>
+            <div data-i18n="flow.ui">모바일 앱</div>
           </div>
-          <p class="section-note" data-i18n="flow.note">사용자가 작업하는 기준은 로컬 저장소로 두고, 서버 반영은 비동기로 처리했습니다. 일시적인 네트워크 문제로 메모 작성과 조회 경험이 끊기지 않도록 하기 위해서였습니다.</p>
+          <p class="section-note" data-i18n="flow.note">PC 앱은 로컬 저장소를 작업 기준으로 사용하고, PC와 모바일은 공통 데이터 모델과 동기화 규칙을 통해 데이터를 공유합니다. 오프라인 변경은 연결 복구 후 다시 동기화하도록 구성했습니다.</p>
         </section>
 
         <section class="case-section">
           <h2 data-i18n="decisions.heading">Engineering Decisions</h2>
           <div class="decision-list">
-            <article><h3 data-i18n="decision.localFirst.title">Local-First 데이터 흐름</h3><p data-i18n="decision.localFirst.copy">사용자의 작성·수정 결과를 먼저 로컬 저장소에 반영하고, 서버 동기화는 별도로 처리하도록 구성했습니다. 네트워크 상태가 일시적으로 바뀌어도 메모 작성과 조회 경험이 끊기지 않도록 하기 위해서였습니다.</p></article>
+            <article><h3 data-i18n="decision.localFirst.title">PC·모바일 공통 데이터 흐름</h3><p data-i18n="decision.localFirst.copy">PC와 모바일이 동일한 데이터 모델과 동기화 규칙을 사용하도록 구성했습니다. PC에서는 작성·수정 결과를 먼저 로컬 저장소에 반영하고 서버 동기화를 별도로 처리해, 네트워크 상태가 바뀌어도 작업을 이어갈 수 있도록 했습니다.</p></article>
             <article><h3 data-i18n="decision.migration.title">단계적 데이터 마이그레이션</h3><p data-i18n="decision.migration.copy">기존 데이터와 새로운 저장 구조가 공존하는 전환 과정에서 버전별 마이그레이션 순서와 의존성을 관리했습니다. 중간 실패가 데이터 손실로 이어지지 않도록 트랜잭션과 재실행 가능성을 고려했습니다.</p></article>
             <article><h3 data-i18n="decision.syncState.title">동기화 상태와 복구 경로</h3><p data-i18n="decision.syncState.copy">로컬 변경 여부와 서버 반영 상태를 구분하고, 연결이 회복되면 미전송 데이터를 다시 처리하도록 흐름을 정리했습니다. 데이터 유형 간의 참조 관계를 고려해 동기화 중 정합성이 깨지지 않도록 했습니다.</p></article>
             <article><h3 data-i18n="decision.continuity.title">업데이트 후의 사용자 경험</h3><p data-i18n="decision.continuity.copy">저장 위치, 설정, 알람처럼 기존 사용 경험에 영향을 주는 요소가 업데이트 이후에도 자연스럽게 이어지도록 데이터 전환과 앱 업데이트 흐름을 함께 점검했습니다.</p></article>
@@ -90,9 +90,9 @@
         <section class="case-section">
           <h2 data-i18n="contribution.heading">My Contribution</h2>
           <ul>
-            <li data-i18n="contribution.one">기존 데이터 구조를 분석하고 단계적 리팩터링·마이그레이션 범위 설계</li>
+            <li data-i18n="contribution.one">PC·모바일 공통 데이터 모델과 동기화 규칙을 기준으로 기존 구조 분석 및 단계적 전환 범위 설계</li>
             <li data-i18n="contribution.two">SQLite 기반 로컬 저장소와 버전별 데이터 마이그레이션 구현</li>
-            <li data-i18n="contribution.three">Local-First 저장, 동기화 상태 관리, 비동기 서버 동기화 흐름 설계·개선</li>
+            <li data-i18n="contribution.three">Local-First 저장, 동기화 상태 관리, 비동기 서버 동기화와 PC·모바일 데이터 연속성 설계·개선</li>
             <li data-i18n="contribution.four">기존 사용자 데이터 전환과 설치·자동 업데이트를 포함한 정식 출시 과정 구현·검증</li>
             <li data-i18n="contribution.five">프로젝트 스킬·plan-first 흐름과 Jenkins·GitHub Actions 기반 AI 협업·CI/CD 인프라 설계·구축</li>
           </ul>
@@ -100,7 +100,7 @@
 
         <section class="case-section case-outcome">
           <h2 data-i18n="outcome.heading">Validation &amp; Outcome</h2>
-          <p data-i18n="outcome.copy">기존 사용자 데이터를 유지한 채 Local-First 구조로 전환하고, 데이터 마이그레이션과 설치·자동 업데이트 흐름까지 구현·검증해 ezMemo PC를 정식 출시했습니다. 네트워크 상태가 변해도 메모 작성과 조회가 이어지고, 업데이트 후에도 기존 데이터와 설정을 그대로 사용할 수 있도록 했습니다.</p>
+          <p data-i18n="outcome.copy">PC와 모바일이 동일한 데이터 모델과 동기화 규칙을 사용하도록 기존 PC 중심 구조를 Local-First로 전환하고, 기존 사용자 데이터 마이그레이션과 설치·자동 업데이트까지 구현·검증해 ezMemo PC를 정식 출시했습니다. 네트워크 상태가 변해도 메모 작성과 조회가 이어지고, PC와 모바일에서 데이터 연속성을 유지할 수 있도록 했습니다. 정식 출시 후 일평균 다운로드는 베타 운영 대비 약 80% 증가했고, 최고 일 다운로드는 베타 평균 대비 약 4배를 기록했으며 DAU도 유사한 증가 추세를 보였습니다.</p>
         </section>
       </article>
     </main>
